@@ -8,7 +8,7 @@ GitHub Pages を使用してオンラインでプレイできるように公開�
 
 ## 🎮 プレイはこちらから
 
-👉 [ゲームをプレイする](https://masafumiasakura.github.io/math_game/index.html)
+👉 [ゲームをプレイする](https://kaorina.github.io/math_game/)
 
 ---
 
