@@ -23,10 +23,3 @@ GitHub Pages を使用してオンラインでプレイできるように公開�
 | 🔁 リトライ機能   | 終了後は「もう一度あそぶ」ボタンで再プレイ可能 |
 
 ---
-
-## 🚀 セットアップ方法（ローカルで試したい場合）
-
-```bash
-git clone https://github.com/masafumiasakura/math_game.git
-cd math_game
-open クイズ2.html # または index.html に変更推奨
