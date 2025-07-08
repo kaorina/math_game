@@ -4,31 +4,51 @@
   <meta charset="UTF-8" />
   <title>小学生クイズゲーム</title>
   <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="小学生向けの算数クイズゲーム。30秒間で問題を解いてスコアを競おう！">
 </head>
 <body>
 
-<!-- キャラクター画像 -->
-<img src="0562d676-2631-4792-95e9-117fb35b10df.png.jpg" alt="キャラクター" class="character" />
+<main>
+  <!-- キャラクター画像 -->
+  <img src="0562d676-2631-4792-95e9-117fb35b10df.png.jpg" alt="算数ゲームのキャラクター" class="character" />
 
-<!-- タイトルと難易度選択 -->
-<h1>🧮 小学生クイズゲーム</h1>
-<div>
-  🎓 難易度をえらんでね:
-  <select id="difficulty">
-    <option value="2">2年生</option>
-    <option value="3">3年生</option>
-  </select>
-</div>
-<button id="startBtn">ゲームスタート！</button>
+  <!-- タイトルと難易度選択 -->
+  <header>
+    <h1>🧮 小学生クイズゲーム</h1>
+  </header>
 
-<!-- ゲーム情報表示エリア -->
-<div id="timer" class="info"></div>
-<div id="score" class="info"></div>
-<div id="accuracy" class="info"></div>
-<div id="question" class="question"></div>
-<div id="options" class="options"></div>
-<div id="result" class="info"></div>
-<button id="retry">もう一度あそぶ</button>
+  <section aria-label="ゲーム設定">
+    <div>
+      <label for="difficulty">🎓 難易度をえらんでね:</label>
+      <select id="difficulty" aria-describedby="difficulty-help">
+        <option value="2">2年生（足し算・引き算）</option>
+        <option value="3">3年生（掛け算・割り算）</option>
+      </select>
+      <div id="difficulty-help" class="sr-only">難易度を選択してからゲームを開始してください</div>
+    </div>
+    <button id="startBtn" aria-describedby="start-help">ゲームスタート！</button>
+    <div id="start-help" class="sr-only">ゲームを開始します。30秒間で問題を解いてください</div>
+  </section>
+
+  <!-- ゲーム情報表示エリア -->
+  <section aria-label="ゲーム情報" aria-live="polite">
+    <div id="timer" class="info" aria-label="残り時間"></div>
+    <div id="score" class="info" aria-label="現在のスコア"></div>
+    <div id="accuracy" class="info" aria-label="正答率"></div>
+  </section>
+
+  <section aria-label="問題と選択肢" aria-live="assertive">
+    <div id="question" class="question" role="heading" aria-level="2"></div>
+    <div id="options" class="options" role="group" aria-label="回答選択肢"></div>
+  </section>
+
+  <div id="result" class="info" aria-live="assertive" aria-label="回答結果"></div>
+  <button id="retry" aria-label="ゲームをもう一度プレイする">もう一度あそぶ</button>
+</main>
+
+<!-- スクリーンリーダー用の追加情報 -->
+<div aria-live="polite" aria-atomic="true" class="sr-only" id="game-status"></div>
 
 <script src="script.js"></script>
 
