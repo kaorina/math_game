@@ -1,0 +1,115 @@
+name: Cypress E2E Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-20.04
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Start local server
+      run: |
+        python3 -m http.server 3000 &
+        sleep 5
+      working-directory: ./
+    
+    - name: Wait for server
+      run: |
+        timeout 30 bash -c 'until curl -s http://localhost:3000; do sleep 1; done'
+    
+    - name: Run Cypress tests
+      uses: cypress-io/github-action@v6
+      with:
+        start: python3 -m http.server 3000
+        wait-on: 'http://localhost:3000'
+        wait-on-timeout: 120
+        browser: chrome
+        record: false
+        config: baseUrl=http://localhost:3000
+    
+    - name: Upload screenshots
+      uses: actions/upload-artifact@v3
+      if: failure()
+      with:
+        name: cypress-screenshots-${{ matrix.node-version }}
+        path: cypress/screenshots
+    
+    - name: Upload videos
+      uses: actions/upload-artifact@v3
+      if: failure()
+      with:
+        name: cypress-videos-${{ matrix.node-version }}
+        path: cypress/videos
+    
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: cypress-results-${{ matrix.node-version }}
+        path: |
+          cypress/results
+          cypress/reports
+
+  # ヘッドレステスト（高速実行用）
+  cypress-headless:
+    runs-on: ubuntu-20.04
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run Cypress tests (headless)
+      uses: cypress-io/github-action@v6
+      with:
+        start: python3 -m http.server 3000
+        wait-on: 'http://localhost:3000'
+        wait-on-timeout: 120
+        browser: chrome
+        headless: true
+        record: false
+        config: baseUrl=http://localhost:3000
+    
+    - name: Generate test report
+      run: |
+        echo "## Cypress Test Results" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Tests completed successfully" >> $GITHUB_STEP_SUMMARY
+        echo "📊 Test artifacts uploaded" >> $GITHUB_STEP_SUMMARY
+    
+    - name: Upload test artifacts
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: cypress-artifacts-headless
+        path: |
+          cypress/screenshots
+          cypress/videos
+          cypress/results
