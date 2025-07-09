@@ -8,7 +8,7 @@ on:
 
 jobs:
   cypress-run:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     
     strategy:
       matrix:
@@ -27,16 +27,6 @@ jobs:
     - name: Install dependencies
       run: npm ci
     
-    - name: Start local server
-      run: |
-        python3 -m http.server 3000 &
-        sleep 5
-      working-directory: ./
-    
-    - name: Wait for server
-      run: |
-        timeout 30 bash -c 'until curl -s http://localhost:3000; do sleep 1; done'
-    
     - name: Run Cypress tests
       uses: cypress-io/github-action@v6
       with:
@@ -48,31 +38,34 @@ jobs:
         config: baseUrl=http://localhost:3000
     
     - name: Upload screenshots
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: failure()
       with:
         name: cypress-screenshots-${{ matrix.node-version }}
         path: cypress/screenshots
+        retention-days: 30
     
     - name: Upload videos
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: failure()
       with:
         name: cypress-videos-${{ matrix.node-version }}
         path: cypress/videos
+        retention-days: 30
     
     - name: Upload test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: cypress-results-${{ matrix.node-version }}
         path: |
           cypress/results
           cypress/reports
+        retention-days: 30
 
   # ヘッドレステスト（高速実行用）
   cypress-headless:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     
     steps:
     - name: Checkout
@@ -99,13 +92,18 @@ jobs:
         config: baseUrl=http://localhost:3000
     
     - name: Generate test report
+      if: always()
       run: |
         echo "## Cypress Test Results" >> $GITHUB_STEP_SUMMARY
-        echo "✅ Tests completed successfully" >> $GITHUB_STEP_SUMMARY
+        if [ $? -eq 0 ]; then
+          echo "✅ Tests completed successfully" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Tests failed" >> $GITHUB_STEP_SUMMARY
+        fi
         echo "📊 Test artifacts uploaded" >> $GITHUB_STEP_SUMMARY
     
     - name: Upload test artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: cypress-artifacts-headless
@@ -113,3 +111,4 @@ jobs:
           cypress/screenshots
           cypress/videos
           cypress/results
+        retention-days: 30
