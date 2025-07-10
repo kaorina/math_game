@@ -30,7 +30,7 @@ jobs:
         wait-on: 'http://localhost:3000'
         wait-on-timeout: 120
         browser: chrome
-        headless: true
+        headed: false
         record: false
         config: baseUrl=http://localhost:3000
     
