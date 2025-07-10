@@ -70,18 +70,10 @@ npm run test:headless
 ```bash
 # 基本的なゲームフローのみ
 npx cypress run --spec "cypress/e2e/game-flow.cy.js"
-
-# エラーハンドリングのみ
-npx cypress run --spec "cypress/e2e/error-handling.cy.js"
-
-# アクセシビリティのみ
-npx cypress run --spec "cypress/e2e/accessibility.cy.js"
 ```
 
 #### **テスト内容**
 - **基本的なゲームフロー** (16テスト): 難易度選択、ゲーム開始、問題表示、回答選択、スコア更新、ゲーム終了
-- **エラーハンドリング** (18テスト): 無効な難易度、DOM要素不在、JavaScript エラー処理
-- **アクセシビリティ** (25テスト): キーボードナビゲーション、スクリーンリーダー対応、ARIA属性
 
 #### **CI/CD自動テスト**
 プルリクエスト作成時にGitHub Actionsで自動実行：

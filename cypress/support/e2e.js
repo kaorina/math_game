@@ -24,15 +24,6 @@ Cypress.on('window:before:load', (win) => {
   win.fetch = null
 })
 
-// Custom commands for accessibility testing
-Cypress.Commands.add('checkA11y', (selector) => {
-  cy.get(selector).should('have.attr', 'aria-label')
-})
-
-Cypress.Commands.add('checkKeyboardNavigation', (selector) => {
-  cy.get(selector).focus().type('{enter}')
-})
-
 // Game specific commands
 Cypress.Commands.add('selectDifficulty', (level) => {
   cy.get('#difficulty').select(level.toString())

@@ -45,18 +45,3 @@ Cypress.Commands.add('completeGame', () => {
   answerQuestions()
 })
 
-// Custom command to check error handling
-Cypress.Commands.add('triggerError', (errorType) => {
-  cy.window().then((win) => {
-    switch (errorType) {
-      case 'dom':
-        win.document.getElementById('score').remove()
-        break
-      case 'invalid-difficulty':
-        win.document.getElementById('difficulty').value = 'invalid'
-        break
-      default:
-        throw new Error('Unknown error type')
-    }
-  })
-})
