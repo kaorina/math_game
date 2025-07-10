@@ -1,0 +1,17 @@
+{
+  "name": "math_game",
+  "version": "1.0.0",
+  "description": "このリポジトリは、**小学校2年生・3年生向けの加減乗除クイズゲーム**です。   GitHub Pages を使用してオンラインでプレイできるように公開しています。",
+  "main": "script.js",
+  "scripts": {
+    "test": "cypress run",
+    "test:open": "cypress open",
+    "test:headless": "cypress run --headless"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^14.5.1"
+  }
+}
